@@ -1,41 +1,4 @@
-import Hero from '../components/Hero'
-import FeatureSection from '../components/FeatureSection'
-import { Suspense } from 'react'
-
-export default function Page(){
-  return (
-    <>
-      <Hero />
-      <div className="max-w-6xl mx-auto px-6">
-        <FeatureSection />
-        <section className="mt-16">
-          <h2 className="text-3xl font-bold">How It Works</h2>
-          <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="p-6 border rounded-lg">
-              <div className="text-4xl font-bold text-gray-900/70">01</div>
-              <h3 className="mt-3 font-semibold">Choose</h3>
-              <p className="mt-2 text-sm text-gray-600">Choose the habits you want to build.</p>
-            </div>
-            <div className="p-6 border rounded-lg">
-              <div className="text-4xl font-bold text-gray-900/70">02</div>
-              <h3 className="mt-3 font-semibold">Track</h3>
-              <p className="mt-2 text-sm text-gray-600">Check in every day and build your streak.</p>
-            </div>
-            <div className="p-6 border rounded-lg">
-              <div className="text-4xl font-bold text-gray-900/70">03</div>
-              <h3 className="mt-3 font-semibold">Transform</h3>
-              <p className="mt-2 text-sm text-gray-600">Use your data to understand your progress and improve.</p>
-            </div>
-          </div>
-        </section>
-      </div>
-      <div className="mt-24 bg-black text-white py-20">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold">Small actions.<br/>Every single day.</h2>
-          <p className="mt-4 text-gray-300">Your future is built from what you repeatedly do today.</p>
-          <button className="mt-6 inline-block bg-white text-black px-6 py-3 rounded-md">Start tracking for free →</button>
-        </div>
-      </div>
-    </>
-  )
-}
+"use client"
+import {useState} from 'react'
+const starter=[['Study Agriculture','60 min','School'],['English practice','30 min','School'],['Math Lit questions','45 min','School'],['Read','15 min','Growth'],['Journal','10 min','Life']]
+export default function Page(){const [habits,setHabits]=useState(starter.map((x,i)=>[...x,i<2]));const [tab,setTab]=useState('Today');const [modal,setModal]=useState(false);const done=habits.filter(x=>x[3]).length;const pct=Math.round(done/habits.length*100);const toggle=(i:number)=>setHabits(h=>h.map((x,j)=>j===i?[x[0],x[1],x[2],!x[3]]:x));return <div className="dayone"><div className="shell"><nav className="nav"><div className="logo"><span className="logoMark">D</span>DAYONE</div><div className="navLinks">{['Today','Habits','Progress','Goals'].map(x=><button className={tab===x?'active':''} onClick={()=>setTab(x)} key={x}>{x}</button>)}</div><button className="avatar">B</button></nav><section className="hero"><div><div className="kicker">SATURDAY · 12 SEPTEMBER 2026</div><h1>Build the day.<br/><span>Become the person.</span></h1><p className="sub">A flexible habit system built for matric. Study smarter, stay consistent and keep your future moving.</p><div className="actions"><button className="primary" onClick={()=>setModal(true)}>+ Add habit</button><button className="secondary" onClick={()=>setTab('Habits')}>Customize</button></div></div><div className="score"><div className="ring"><strong>{pct}%</strong><small>today</small></div><p>{done} of {habits.length} habits complete</p></div></section><section className="dashboard"><div className="card"><div className="cardHead"><div><div className="label">TODAY</div><h2>Your habits</h2></div><span className="streak">🔥 7 day streak</span></div>{habits.map((h,i)=><button key={i} className={'habit '+(h[3]?'done':'')} onClick={()=>toggle(i)}><span className="check">{h[3]?'✓':''}</span><span className="habitText"><b>{h[0]}</b><small>{h[1]} · {h[2]}</small></span><span className="arrow">›</span></button>)}</div><div className="side"><div className="card focus"><div className="label">WEEKLY FOCUS</div><h2>Protect your future.</h2><p>School first. Build discipline. Make progress you can see.</p><div className="progressBar"><i/></div><small>72% weekly consistency</small></div><div className="card quick"><div className="label">QUICK VIEW</div><div><b>12</b><span>habits completed<br/>this week</span></div><div><b>4</b><span>goals<br/>in progress</span></div></div></div></section><footer className="footer"><span>© 2026 DAYONE</span><span>Privacy · Terms</span><span>Created by Bono Mtolo</span></footer></div>{modal&&<div className="modal" onClick={()=>setModal(false)}><div className="modalCard" onClick={e=>e.stopPropagation()}><div className="label">NEW HABIT</div><h2>Create your own system.</h2><p>Add a habit, choose how often you want it, then check in each day.</p><input placeholder="Habit name"/><button className="primary" onClick={()=>setModal(false)}>Save habit</button></div></div>}</div>}
